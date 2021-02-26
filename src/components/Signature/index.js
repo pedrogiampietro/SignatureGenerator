@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Button,
   Col,
@@ -10,295 +10,133 @@ import {
   Row,
 } from 'reactstrap';
 
-import FolhaVerde from '../../assets/img/FolhaVerde.jpg';
-import LogoL8 from '../../assets/img/logo-test.png';
-import Linha from '../../assets/img/linha.jpg';
+import SignatureImage from '../../assets/img/Assinatura.png';
 
-class Signature extends Component {
-  constructor(props) {
-    super(props);
+const Signature = () => {
+  const canvas = useRef(null);
 
-    this.state = {
-      nome: 'Pedro Henrique',
-      empresa: 'L8 Group',
-      cargo: 'Desenvolvedor',
-      telefone: '21 0000-0000',
-      copiarFonte: 'Copiar Código Fonte',
-      copiarAssinatura: 'Copiar Assinatura',
-      statusAssinatura: 0,
-      statusFonte: 0,
-      child: '',
-    };
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [telephone, setTelephone] = useState('');
 
-    this.handleData = this.handleData.bind(this);
-    this.getAssinatura = this.getAssinatura.bind(this);
-    this.getCodigoFonte = this.getCodigoFonte.bind(this);
-  }
+  useEffect(() => {
+    const catImage = new Image();
+    catImage.src = SignatureImage;
+    catImage.onload = () => setImage(catImage);
+  }, []);
 
-  handleData(data) {
-    this.setState({
-      image: data,
-    });
-  }
+  useEffect(() => {
+    if (image && canvas) {
+      const ctx = canvas.current.getContext('2d');
 
-  getCodigoFonte() {
-    let assinatura = document.getElementById('assinatura').innerHTML;
+      ctx.drawImage(image, 10, 10);
 
-    navigator.clipboard.writeText(assinatura);
+      ctx.font = 'bold 17px Arial';
+      ctx.fillStyle = '#202124';
+      ctx.textAlign = 'left';
+      ctx.fillText(name, 280 / 2, 38);
 
-    this.setState({
-      copiarFonte: 'Copiado! ;)',
-      statusFonte: 1,
-    });
+      ctx.font = 'normal 15px Arial';
+      ctx.fillStyle = '#00a8ff';
+      ctx.fillText(email, 280 / 2, 57);
 
-    setTimeout(
-      function () {
-        this.setState({
-          copiarFonte: 'Copiar Código Fonte',
-          statusFonte: 0,
-        });
-      }.bind(this),
-      2000
-    );
-  }
-
-  getAssinatura() {
-    function listener(e) {
-      let str = document.getElementById('assinatura').innerHTML;
-      e.clipboardData.setData('text/html', str);
-      e.clipboardData.setData('text/plain', str);
-      e.preventDefault();
+      ctx.font = 'normal 15px Arial';
+      ctx.fillStyle = '#202124';
+      ctx.fillText(telephone, 280 / 2, 77);
     }
+  }, [image, canvas, name, email, telephone]);
 
-    document.addEventListener('copy', listener);
-    document.execCommand('copy');
-    document.removeEventListener('copy', listener);
+  function downloadPng() {}
 
-    this.setState({
-      copiarAssinatura: 'Copiado! Agora é só instalar ;)',
-      statusAssinatura: 1,
-    });
+  return (
+    <div className="hero">
+      <Container>
+        <Row>
+          <Col lg="6" className="mb-5">
+            <div className="nav-header mt-4 mb-5">Gerador de Assinaturas</div>
+            <Form className="mb-5">
+              <FormGroup row className="mb-4">
+                <Label for="name" sm={3}>
+                  Nome
+                </Label>
+                <Col sm={9}>
+                  <Input
+                    type="text"
+                    name="name"
+                    id="name"
+                    placeholder="Nome"
+                    onChange={(e) => setName(e.target.value)}
+                  />{' '}
+                </Col>
+              </FormGroup>
 
-    setTimeout(
-      function () {
-        this.setState({
-          copiarAssinatura: 'Copiar Assinatura',
-          statusAssinatura: 0,
-        });
-      }.bind(this),
-      2000
-    );
-  }
+              <FormGroup row className="mb-4">
+                <Label for="exampleSelect" sm={3}>
+                  E-mail
+                </Label>
+                <Col sm={9}>
+                  <Input
+                    type="text"
+                    name="email"
+                    id="email"
+                    placeholder="E-mail"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />{' '}
+                </Col>
+              </FormGroup>
 
-  render() {
-    return (
-      <div className="hero">
-        <Container>
-          <Row>
-            <Col lg="6" className="mb-5">
-              <div className="nav-header mt-4 mb-5">Gerador de Assinaturas</div>
-              <Form className="mb-5">
-                <FormGroup row className="mb-4">
-                  <Label for="name" sm={3}>
-                    Nome
-                  </Label>
-                  <Col sm={9}>
-                    <Input
-                      type="text"
-                      name="name"
-                      id="name"
-                      placeholder="Nome"
-                      onChange={(e) => this.setState({ nome: e.target.value })}
-                    />{' '}
-                  </Col>
-                </FormGroup>
+              <FormGroup row className="mb-4">
+                <Label for="cargo" sm={3}>
+                  Telefone
+                </Label>
+                <Col sm={9}>
+                  <Input
+                    type="phone"
+                    name="cargo"
+                    id="cargo"
+                    placeholder="Telefone"
+                    onChange={(e) => setTelephone(e.target.value)}
+                  />
+                </Col>
+              </FormGroup>
+            </Form>
+            <Button color="primary" onClick={downloadPng}>
+              <i className="fal fa-copy"></i> Baixe sua Assinatura
+            </Button>
+          </Col>
 
-                <FormGroup row className="mb-4">
-                  <Label for="exampleSelect" sm={3}>
-                    Empresa
-                  </Label>
-                  <Col sm={9}>
-                    <Input
-                      type="select"
-                      name="select"
-                      id="exampleSelect"
-                      onChange={(e) =>
-                        this.setState({ empresa: e.target.value })
-                      }
-                    >
-                      <option value="">Selecionar...</option>
-                      <option value="superlogica">Superlógica</option>
-                      <option value="pjbank">PJBank</option>
-                    </Input>
-                  </Col>
-                </FormGroup>
+          <Col lg="6" className="ml-auto">
+            <div className="nav-header mt-4 mb-5">Pré-visualizar</div>
 
-                <FormGroup row className="mb-4">
-                  <Label for="cargo" sm={3}>
-                    Cargo/Setor
-                  </Label>
-                  <Col sm={9}>
-                    <Input
-                      type="text"
-                      name="cargo"
-                      id="cargo"
-                      placeholder="Cargo/Setor"
-                      onChange={(e) => this.setState({ cargo: e.target.value })}
-                    />
-                  </Col>
-                </FormGroup>
-
-                <FormGroup row className="mb-4">
-                  <Label for="cargo" sm={3}>
-                    Telefone
-                  </Label>
-                  <Col sm={9}>
-                    <Input
-                      type="phone"
-                      name="cargo"
-                      id="cargo"
-                      placeholder="Telefone"
-                      onChange={(e) =>
-                        this.setState({ telefone: e.target.value })
-                      }
-                    />
-                  </Col>
-                </FormGroup>
-              </Form>
-              <Button color="primary" onClick={this.getAssinatura}>
-                <i class="fal fa-copy"></i> {'  '} {this.state.copiarAssinatura}
-              </Button>{' '}
-              <Button color="primary" onClick={this.getCodigoFonte}>
-                <i class="fal fa-copy"></i> {'  '} {this.state.copiarFonte}
-              </Button>
-            </Col>
-
-            <Col lg="6" className="ml-auto">
-              <div className="nav-header mt-4 mb-5">Pré-visualizar</div>
-
-              <div className="header-email">Nova Mensagem</div>
-              <div className="card-email">
-                <div className="destinatario">
-                  <span>Para:</span> Seu destinatário
-                </div>
-                <div className="assunto">
-                  <span>Assunto:</span> Veja minha nova assinatura de e-mail
-                </div>
-                <div className="mensagem">
-                  Olá Carlos,
-                  <br />
-                  <br />
-                  Esse é um exemplo de e-mail criado no Gerador de Assinaturas
-                  de E-mail da Superlógica. Aqui dá para você ter uma ideia de
-                  como vai ficar a sua assinatura final.
-                  <br />
-                  <br />
-                  Abraços!
-                </div>
-                <div className="assinatura" id="assinatura">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <td width="86">
-                          {/* LOGO */}
-                          <img
-                            src={LogoL8}
-                            title={this.state.nome}
-                            alt={this.state.nome}
-                            width="60"
-                            height="60"
-                          />
-                        </td>
-                        <td width="30" align="center">
-                          <img src={Linha} alt="linha" />
-                        </td>
-                        <td width="297" valign="top">
-                          <p
-                            style={{
-                              marginTop: '0px',
-                              marginBottom: '5px',
-                              lineHeight: '1.0',
-                            }}
-                          >
-                            <strong
-                              style={{ fontSize: '22px', color: '#535353' }}
-                            >
-                              {this.state.nome}
-                            </strong>
-                          </p>
-                          <p
-                            style={{
-                              margin: '0px',
-                              color: '#707070',
-                              fontSize: '14px',
-                              marginBottom: '13px',
-                              lineHeight: '1.2',
-                            }}
-                          >
-                            <span
-                              style={{ fontSize: '14px', color: '#707070' }}
-                            >
-                              {this.state.cargo}
-                              <br />
-                              {this.state.telefone}{' '}
-                            </span>
-                          </p>
-
-                          <img
-                            src={FolhaVerde}
-                            alt={this.state.empresa}
-                            border="0"
-                            target="_blank"
-                          />
-                          <span
-                            style={{
-                              margin: '0px',
-                              marginTop: '12px',
-                              color: '#707070',
-                              fontWeight: 'bold',
-                              fontSize: '15px',
-                              lineHeight: '1.2',
-                              textAlign: 'justify',
-                            }}
-                          >
-                            Antes de imprimir, pense na sua responsabilidade com
-                            o meio ambiente.
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="3" width="415">
-                          <p
-                            style={{
-                              margin: '0px',
-                              marginTop: '12px',
-                              color: '#707070',
-                              fontSize: '12px',
-                              lineHeight: '1.2',
-                              textAlign: 'justify',
-                            }}
-                          >
-                            Este e-mail contém informações confidenciais e/ou
-                            privilegiadas. Se você não for o destinatário ou a
-                            pessoa autorizada a receber este documento, não deve
-                            usar, copiar ou divulgar as informações nele
-                            contidas ou tomar qualquer ação baseada nessas
-                            informações. Caso tenha recepcionado este e-mail por
-                            engano, favor informar o remetente e apagar a
-                            mensagem imediatamente.{' '}
-                          </p>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+            <div className="header-email">Nova Mensagem</div>
+            <div className="card-email">
+              <div className="destinatario">
+                <span>Para:</span> Seu destinatário
               </div>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
+              <div className="assunto">
+                <span>Assunto:</span> Veja minha nova assinatura de e-mail
+              </div>
+              <div className="mensagem">
+                Olá {name}
+                <br />
+                <br />
+                Esse é um exemplo de e-mail criado no Gerador de Assinaturas de
+                E-mail da L8 Group. Aqui dá para você ter uma ideia de como vai
+                ficar a sua assinatura final.
+                <br />
+                <br />
+                Abraços!
+              </div>
+              <div className="assinatura" id="assinatura">
+                <canvas ref={canvas} width={484} height={207} />
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
 export default Signature;

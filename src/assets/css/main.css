@@ -78,7 +78,7 @@ body {
   padding: 0.85rem;
 }
 
-.avatar.selected{
+.avatar.selected {
   border-color: #28a745;
   box-shadow: 0 0 0 0.3rem rgba(40, 167, 69, 0.25);
 }
@@ -96,7 +96,7 @@ body {
 }
 
 .nav-header:after {
-  content: "";
+  content: '';
   background-color: #047bf8;
   width: 25px;
   height: 4px;
@@ -139,4 +139,9 @@ body {
 .logo {
   width: 30px;
   margin-top: -5px;
+}
+
+.assinatura {
+  width: 484px;
+  height: 207px;
 }
