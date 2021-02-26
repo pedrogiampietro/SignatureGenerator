@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
-
-import ImageSelector from '../ImageSelector';
-
 import {
-  Container,
-  Row,
-  Col,
   Button,
+  Col,
+  Container,
   Form,
   FormGroup,
-  Label,
   Input,
-  FormText,
+  Label,
+  Row,
 } from 'reactstrap';
 
 import FolhaVerde from '../../assets/img/FolhaVerde.jpg';
-import LogoL8 from '../../assets/img/logob.png';
+import LogoL8 from '../../assets/img/logo-test.png';
+import Linha from '../../assets/img/linha.jpg';
 
 class Signature extends Component {
   constructor(props) {
@@ -26,7 +23,6 @@ class Signature extends Component {
       empresa: 'L8 Group',
       cargo: 'Desenvolvedor',
       telefone: '21 0000-0000',
-      image: `${LogoL8}`,
       copiarFonte: 'Copiar Código Fonte',
       copiarAssinatura: 'Copiar Assinatura',
       statusAssinatura: 0,
@@ -43,22 +39,6 @@ class Signature extends Component {
     this.setState({
       image: data,
     });
-  }
-
-  renderBrand() {
-    let state = this.state.empresa;
-
-    if (state === 'pjbank') return '/assets/img/logo-pjbank.jpg';
-
-    return '/assets/img/logo-superlogica.jpg';
-  }
-
-  renderLinha() {
-    let state = this.state.empresa;
-
-    if (state === 'pjbank') return '/assets/img/linha-pjbank.jpg';
-
-    return '/assets/img/linha-superlogica.jpg';
   }
 
   getCodigoFonte() {
@@ -184,17 +164,6 @@ class Signature extends Component {
                     />
                   </Col>
                 </FormGroup>
-
-                <FormGroup row className="mb-4">
-                  <Label sm={3}>Avatar</Label>
-                  <Col sm={9}>
-                    <ImageSelector callbackFromParent={this.handleData} />
-                    <FormText color="muted">
-                      This is some placeholder block-level help text for the
-                      above input.
-                    </FormText>
-                  </Col>
-                </FormGroup>
               </Form>
               <Button color="primary" onClick={this.getAssinatura}>
                 <i class="fal fa-copy"></i> {'  '} {this.state.copiarAssinatura}
@@ -231,17 +200,17 @@ class Signature extends Component {
                     <tbody>
                       <tr>
                         <td width="86">
-                          {/* avatar */}
+                          {/* LOGO */}
                           <img
-                            src={this.state.image}
+                            src={LogoL8}
                             title={this.state.nome}
                             alt={this.state.nome}
-                            width="105"
-                            height="101"
+                            width="60"
+                            height="60"
                           />
                         </td>
                         <td width="30" align="center">
-                          <img src={this.renderLinha()} alt="linha" />
+                          <img src={Linha} alt="linha" />
                         </td>
                         <td width="297" valign="top">
                           <p
