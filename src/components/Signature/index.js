@@ -47,7 +47,17 @@ const Signature = () => {
     }
   }, [image, canvas, name, email, telephone]);
 
-  function downloadPng() {}
+  function downloadPng() {
+    const canvas = document.getElementById('canvas');
+
+    let link = document.getElementById('link');
+    link.setAttribute('download', `${name}.png`);
+    link.setAttribute(
+      'href',
+      canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+    );
+    link.click();
+  }
 
   return (
     <div className="hero">
@@ -104,6 +114,7 @@ const Signature = () => {
             <Button color="primary" onClick={downloadPng}>
               <i className="fal fa-copy"></i> Baixe sua Assinatura
             </Button>
+            <a href="#" id="link"></a>
           </Col>
 
           <Col lg="6" className="ml-auto">
@@ -129,7 +140,7 @@ const Signature = () => {
                 Abraços!
               </div>
               <div className="assinatura" id="assinatura">
-                <canvas ref={canvas} width={484} height={207} />
+                <canvas id="canvas" ref={canvas} width={484} height={207} />
               </div>
             </div>
           </Col>
