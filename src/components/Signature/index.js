@@ -1,16 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
-import {
-  Button,
-  Col,
-  Container,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-  Row,
-} from 'reactstrap';
-
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Col, Container, Row } from 'reactstrap';
 import SignatureImage from '../../assets/img/Assinatura.png';
+import FormNew from '../FormNew';
 
 const Signature = () => {
   const canvas = useRef(null);
@@ -48,6 +39,10 @@ const Signature = () => {
   }, [image, canvas, name, email, telephone]);
 
   function downloadPng() {
+    if (!name || !email || !telephone) {
+      return;
+    }
+
     const canvas = document.getElementById('canvas');
 
     let link = document.getElementById('link');
@@ -65,56 +60,19 @@ const Signature = () => {
         <Row>
           <Col lg="6" className="mb-5">
             <div className="nav-header mt-4 mb-5">Gerador de Assinaturas</div>
-            <Form className="mb-5">
-              <FormGroup row className="mb-4">
-                <Label for="name" sm={3}>
-                  Nome
-                </Label>
-                <Col sm={9}>
-                  <Input
-                    type="text"
-                    name="name"
-                    id="name"
-                    placeholder="Nome"
-                    onChange={(e) => setName(e.target.value)}
-                  />{' '}
-                </Col>
-              </FormGroup>
 
-              <FormGroup row className="mb-4">
-                <Label for="exampleSelect" sm={3}>
-                  E-mail
-                </Label>
-                <Col sm={9}>
-                  <Input
-                    type="text"
-                    name="email"
-                    id="email"
-                    placeholder="E-mail"
-                    onChange={(e) => setEmail(e.target.value)}
-                  />{' '}
-                </Col>
-              </FormGroup>
+            <FormNew
+              setName={setName}
+              setEmail={setEmail}
+              setTelephone={setTelephone}
+            />
 
-              <FormGroup row className="mb-4">
-                <Label for="cargo" sm={3}>
-                  Telefone
-                </Label>
-                <Col sm={9}>
-                  <Input
-                    type="phone"
-                    name="cargo"
-                    id="cargo"
-                    placeholder="Telefone"
-                    onChange={(e) => setTelephone(e.target.value)}
-                  />
-                </Col>
-              </FormGroup>
-            </Form>
             <Button color="primary" onClick={downloadPng}>
               <i className="fal fa-copy"></i> Baixe sua Assinatura
             </Button>
-            <a href="#" id="link"></a>
+            <a href="/" id="link">
+              {' '}
+            </a>
           </Col>
 
           <Col lg="6" className="ml-auto">
